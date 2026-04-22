@@ -578,7 +578,7 @@ body:has(a:hover) #cursor, body:has(button:hover) #cursor { width:20px; height:2
 
 /* ─── RECORDS PAGE ─── */
 .records-hero {
-  min-height: 85vh;
+  min-height: 100vh;
   display: flex; flex-direction: column;
   justify-content: center; align-items: center;
   text-align: center; position: relative;
@@ -1324,8 +1324,7 @@ footer {
 
   <!-- Hero -->
   <section class="records-hero">
-    <div class="records-hero-bg"></div>
-    <div class="records-big-num">85</div>
+    <div class="records-hero-bg" style="background: linear-gradient(rgba(7,7,14,0.4), rgba(7,7,14,0.7)), url('assets/Records/records.png') center/cover no-repeat;"></div>
     <p class="section-label reveal" style="justify-content:center;">Records</p>
     <h1 class="reveal reveal-d1">RECORDS THAT<br>REDEFINED THE GAME</h1>
     <p style="font-size:14px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-dim);margin-top:16px;" class="reveal reveal-d2">Precision. Consistency. Longevity.</p>
@@ -1472,6 +1471,7 @@ footer {
 
   <!-- Chase Master -->
   <section class="chase-section">
+    <div style="position: absolute; inset: 0;background: linear-gradient(rgba(7,7,14,0.4), rgba(7,7,14,0.7)), url('assets/Records/chasemaster.png') center/cover no-repeat; pointer-events: none; z-index: 0;"></div>
     <div class="chase-bg-text">CHASE</div>
     <div class="chase-content">
       <p class="section-label reveal">Identity</p>
