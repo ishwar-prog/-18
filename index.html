@@ -885,7 +885,7 @@ body:has(a:hover) #cursor, body:has(button:hover) #cursor { width:20px; height:2
 
 /* ─── FOUNDATION PAGE ─── */
 .foundation-hero {
-  min-height: 80vh;
+  min-height: 100vh;
   display: flex; flex-direction: column;
   justify-content: flex-end;
   padding: 100px 80px 80px;
@@ -894,9 +894,7 @@ body:has(a:hover) #cursor, body:has(button:hover) #cursor { width:20px; height:2
 }
 .foundation-hero-bg {
   position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 60% 70% at 70% 30%, rgba(19,136,8,0.06) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 50% at 20% 80%, rgba(255,153,51,0.04) 0%, transparent 60%);
+  background: linear-gradient(rgba(7,7,14,0.4), rgba(7,7,14,0.7)), url('assets/foundation/foundation.png') center/cover no-repeat;
 }
 .foundation-hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(72px, 10vw, 150px); line-height: 0.85; color: var(--white); position: relative; z-index: 2; }
 .foundation-hero h1 span { color: var(--green-bright); }
@@ -1757,23 +1755,32 @@ footer {
     <p class="section-label reveal" style="color:var(--green-bright)">Key Initiatives</p>
     <h2 class="section-headline reveal reveal-d1">Three Pillars of <span class="headline-green">Change</span></h2>
     <div class="initiatives-grid">
-      <div class="initiative-card reveal reveal-d1">
-        <div class="initiative-icon">🏏</div>
-        <div class="initiative-num">01</div>
-        <div class="initiative-title">Grassroots Sports</div>
-        <div class="initiative-desc">Providing access to professional coaching, sports infrastructure, and mentorship to identify and nurture talent in underserved communities across India.</div>
+      <div class="initiative-card reveal reveal-d1" style="position:relative; overflow:hidden;">
+        <div style="position:absolute; inset:0; background:linear-gradient(rgba(14,14,28,0.65), rgba(14,14,28,0.95)), url('assets/foundation/grassroot.png') center/cover no-repeat; z-index:0; transition: transform 0.4s ease;"></div>
+        <div style="position:relative; z-index:2;">
+          <div class="initiative-icon">🏏</div>
+          <div class="initiative-num">01</div>
+          <div class="initiative-title">Grassroots Sports</div>
+          <div class="initiative-desc">Providing access to professional coaching, sports infrastructure, and mentorship to identify and nurture talent in underserved communities across India.</div>
+        </div>
       </div>
-      <div class="initiative-card reveal reveal-d2" style="border-bottom-color:var(--saffron)">
-        <div class="initiative-icon">📚</div>
-        <div class="initiative-num" style="color:var(--saffron-dim)">02</div>
-        <div class="initiative-title">Education Support</div>
-        <div class="initiative-desc">Scholarships, academic programs, and educational infrastructure — ensuring that economic barriers never stop a bright mind from reaching its potential.</div>
+      <div class="initiative-card reveal reveal-d2" style="border-bottom-color:var(--saffron); position:relative; overflow:hidden;">
+        <div style="position:absolute; inset:0; background:linear-gradient(rgba(14,14,28,0.7), rgba(14,14,28,0.95)), url('assets/foundation/education.png') center/contain no-repeat; z-index:0; transition: transform 0.4s ease;"></div>
+        <div style="position:relative; z-index:2;">
+          <div class="initiative-icon">📚</div>
+          <div class="initiative-num" style="color:var(--saffron-dim)">02</div>
+          <div class="initiative-title">Education Support</div>
+          <div class="initiative-desc">Scholarships, academic programs, and educational infrastructure — ensuring that economic barriers never stop a bright mind from reaching its potential.</div>
+        </div>
       </div>
-      <div class="initiative-card reveal reveal-d3">
-        <div class="initiative-icon">❤️</div>
-        <div class="initiative-num">03</div>
-        <div class="initiative-title">Child Welfare</div>
-        <div class="initiative-desc">Holistic programs covering health, nutrition, and safe environments. Building the foundation that allows children to grow, learn, and dream without limitation.</div>
+      <div class="initiative-card reveal reveal-d3" style="position:relative; overflow:hidden;">
+        <div style="position:absolute; inset:0; background:linear-gradient(rgba(14,14,28,0.65), rgba(14,14,28,0.95)), url('assets/foundation/child.png') center/cover no-repeat; z-index:0; transition: transform 0.4s ease;"></div>
+        <div style="position:relative; z-index:2;">
+          <div class="initiative-icon">❤️</div>
+          <div class="initiative-num">03</div>
+          <div class="initiative-title">Child Welfare</div>
+          <div class="initiative-desc">Holistic programs covering health, nutrition, and safe environments. Building the foundation that allows children to grow, learn, and dream without limitation.</div>
+        </div>
       </div>
     </div>
   </section>
