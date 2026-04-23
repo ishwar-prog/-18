@@ -1088,6 +1088,10 @@ footer {
   #cursor, #cursor-ring, .side-line, .home-hint { display: none !important; }
 
   #nav {
+    position: sticky;
+    top: 0;
+    left: auto;
+    right: auto;
     height: auto;
     min-height: 64px;
     padding: 10px 12px;
@@ -1095,6 +1099,8 @@ footer {
     flex-wrap: wrap;
     align-items: center;
     justify-content: flex-start;
+    background: rgba(7,7,14,0.96) !important;
+    backdrop-filter: blur(10px);
   }
 
   .nav-logo img { height: 44px !important; }
@@ -1237,11 +1243,18 @@ footer {
   .gallery-masonry { columns: 1 !important; column-gap: 0; }
   .gallery-thumb-img { transform: none !important; }
 
+  .foundation-hero {
+    min-height: 72vh !important;
+    justify-content: flex-start !important;
+    padding-top: 28px !important;
+    padding-bottom: 36px !important;
+  }
+
   .foundation-hero-bg {
-    background-size: contain !important;
-    background-position: center top !important;
+    background-image: linear-gradient(rgba(7,7,14,0.4), rgba(7,7,14,0.7)), url('assets/foundation/foundation2.png') !important;
+    background-size: cover !important;
+    background-position: center 18% !important;
     background-repeat: no-repeat !important;
-    background-color: var(--surface) !important;
   }
 
   .reveal { opacity: 1; transform: none; transition: none; }
