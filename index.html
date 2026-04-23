@@ -278,9 +278,22 @@ body:has(a:hover) #cursor, body:has(button:hover) #cursor { width:20px; height:2
 }
 .career-hero-bg {
   position: absolute; inset: 0;
-  background: 
-    radial-gradient(ellipse 60% 80% at 80% 50%, rgba(255,153,51,0.06) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(19,136,8,0.05) 0%, transparent 70%);
+  background: url('assets/Career/career.png') center/cover no-repeat;
+  /* Paint-drop style reveal animation: runs once on load */
+  animation: paintDropReveal 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  z-index: 0;
+}
+@keyframes paintDropReveal {
+  0% {
+    clip-path: circle(0% at 50% 50%);
+    filter: blur(20px) contrast(200%);
+    transform: scale(1.15);
+  }
+  100% {
+    clip-path: circle(150% at 50% 50%);
+    filter: blur(0px) contrast(100%);
+    transform: scale(1);
+  }
 }
 .career-hero-num {
   font-family: 'Bebas Neue', sans-serif;
@@ -298,26 +311,32 @@ body:has(a:hover) #cursor, body:has(button:hover) #cursor { width:20px; height:2
   line-height: 0.88;
   color: var(--white);
   position: relative; z-index: 2;
+  /* Dark text shadow ensures legibility without a black tint */
+  text-shadow: 0 4px 10px rgba(0,0,0,0.8);
 }
 .career-hero h1 em {
   font-style: normal;
   -webkit-text-stroke: 1px var(--saffron);
   color: transparent;
+  text-shadow: none;
 }
 .career-hero-sub {
   font-size: 14px; letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--text-dim);
+  color: var(--white);
   margin-top: 20px;
   position: relative; z-index: 2;
-  font-weight: 300;
+  font-weight: 500;
   font-style: italic;
+  text-shadow: 0 2px 6px rgba(0,0,0,1);
 }
 .career-stats-strip {
   display: flex; gap: 60px;
   margin-top: 48px;
   padding-top: 32px;
   border-top: 1px solid var(--saffron-dim);
+  position: relative; z-index: 2;
+}
   position: relative; z-index: 2;
 }
 .cs-item { display: flex; flex-direction: column; }
@@ -917,12 +936,39 @@ body:has(a:hover) #cursor, body:has(button:hover) #cursor { width:20px; height:2
   gap: 2px; margin-top: 48px;
 }
 .initiative-card {
+  position: relative; overflow: hidden;
   background: var(--surface);
   padding: 52px 40px;
   border-bottom: 3px solid var(--green-bright);
-  transition: transform .3s, background .3s;
+  transition: transform .4s ease;
 }
-.initiative-card:hover { transform: translateY(-4px); background: var(--surface2); }
+.initiative-card:hover { transform: translateY(-4px); }
+.initiative-card-bg {
+  position: absolute; inset: 0; z-index: 0;
+  transition: transform 0.6s ease;
+}
+.initiative-card-bg::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(7,7,14,0.95), rgba(7,7,14,0.4)); 
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.initiative-card:hover .initiative-card-bg {
+  transform: scale(1.05);
+}
+.initiative-card:hover .initiative-card-bg::after {
+  opacity: 1;
+}
+.initiative-card-content {
+  position: relative; z-index: 2;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+}
+.initiative-card:hover .initiative-card-content {
+  opacity: 1;
+  transform: translateY(0);
+}
 .initiative-icon { font-size: 36px; margin-bottom: 20px; }
 .initiative-num { font-family: 'Bebas Neue', sans-serif; font-size: 72px; color: var(--green-dim); line-height: 1; }
 .initiative-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--white); letter-spacing: 0.02em; margin-top: -8px; }
@@ -1052,7 +1098,6 @@ footer {
   <!-- 1. Hero Entry -->
   <section class="career-hero">
     <div class="career-hero-bg"></div>
-    <div class="career-hero-img" style="position:absolute; right:0; top:10%; width:45%; height:90%; background:url('assets/Career/career.png') center/contain no-repeat; mask-image:linear-gradient(to right, transparent, black 20%, black 80%, transparent); -webkit-mask-image:linear-gradient(to right, transparent, black 10%); opacity:0.8; z-index:1; pointer-events:none;"></div>
     <div class="career-hero-num">18</div>
     <p class="section-label reveal">Career</p>
     <h1 class="reveal reveal-d1">VIRAT KOHLI —<br><em>DEFINING MODERN</em><br>GREATNESS</h1>
@@ -1755,27 +1800,27 @@ footer {
     <p class="section-label reveal" style="color:var(--green-bright)">Key Initiatives</p>
     <h2 class="section-headline reveal reveal-d1">Three Pillars of <span class="headline-green">Change</span></h2>
     <div class="initiatives-grid">
-      <div class="initiative-card reveal reveal-d1" style="position:relative; overflow:hidden;">
-        <div style="position:absolute; inset:0; background:linear-gradient(rgba(14,14,28,0.65), rgba(14,14,28,0.95)), url('assets/foundation/grassroot.png') center/cover no-repeat; z-index:0; transition: transform 0.4s ease;"></div>
-        <div style="position:relative; z-index:2;">
+      <div class="initiative-card reveal reveal-d1">
+        <div class="initiative-card-bg" style="background: url('assets/foundation/grassroot.png') center/cover no-repeat;"></div>
+        <div class="initiative-card-content">
           <div class="initiative-icon">🏏</div>
           <div class="initiative-num">01</div>
           <div class="initiative-title">Grassroots Sports</div>
           <div class="initiative-desc">Providing access to professional coaching, sports infrastructure, and mentorship to identify and nurture talent in underserved communities across India.</div>
         </div>
       </div>
-      <div class="initiative-card reveal reveal-d2" style="border-bottom-color:var(--saffron); position:relative; overflow:hidden;">
-        <div style="position:absolute; inset:0; background:linear-gradient(rgba(14,14,28,0.7), rgba(14,14,28,0.95)), url('assets/foundation/education.png') center/contain no-repeat; z-index:0; transition: transform 0.4s ease;"></div>
-        <div style="position:relative; z-index:2;">
+      <div class="initiative-card reveal reveal-d2" style="border-bottom-color:var(--saffron);">
+        <div class="initiative-card-bg" style="background: var(--surface) url('assets/foundation/education.png') center/contain no-repeat;"></div>
+        <div class="initiative-card-content">
           <div class="initiative-icon">📚</div>
           <div class="initiative-num" style="color:var(--saffron-dim)">02</div>
           <div class="initiative-title">Education Support</div>
           <div class="initiative-desc">Scholarships, academic programs, and educational infrastructure — ensuring that economic barriers never stop a bright mind from reaching its potential.</div>
         </div>
       </div>
-      <div class="initiative-card reveal reveal-d3" style="position:relative; overflow:hidden;">
-        <div style="position:absolute; inset:0; background:linear-gradient(rgba(14,14,28,0.65), rgba(14,14,28,0.95)), url('assets/foundation/child.png') center/cover no-repeat; z-index:0; transition: transform 0.4s ease;"></div>
-        <div style="position:relative; z-index:2;">
+      <div class="initiative-card reveal reveal-d3">
+        <div class="initiative-card-bg" style="background: url('assets/foundation/child.png') center/cover no-repeat;"></div>
+        <div class="initiative-card-content">
           <div class="initiative-icon">❤️</div>
           <div class="initiative-num">03</div>
           <div class="initiative-title">Child Welfare</div>
