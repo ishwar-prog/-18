@@ -31,13 +31,24 @@
   --text-dim: rgba(232,228,220,0.55);
 }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
 body {
   background: var(--bg);
   color: var(--text);
   font-family: 'Barlow Condensed', sans-serif;
   overflow-x: hidden;
   cursor: none;
+}
+
+img, canvas, video {
+  max-width: 100%;
+}
+
+p, h1, h2, h3, h4, h5, h6, .section-para, .timeline-detail, .initiative-desc, .style-desc, .elite-record-desc {
+  overflow-wrap: anywhere;
 }
 
 /* ─── CURSOR ─── */
@@ -1071,6 +1082,185 @@ footer {
   .home-ui { padding: 100px 30px 40px; }
   .home-stats { gap: 28px; }
 }
+
+@media (max-width: 768px) {
+  body { cursor: auto; }
+  #cursor, #cursor-ring, .side-line, .home-hint { display: none !important; }
+
+  #nav {
+    height: auto;
+    min-height: 64px;
+    padding: 10px 12px;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .nav-logo img { height: 44px !important; }
+
+  .nav-links {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+
+  .nav-links::-webkit-scrollbar { display: none; }
+
+  .nav-link {
+    flex: 0 0 auto;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    padding: 8px 12px;
+  }
+
+  .page { min-height: 100dvh; }
+  #page-home { height: 100dvh; }
+
+  .home-ui { padding: 92px 16px 20px; }
+  .home-name h1 { font-size: clamp(44px, 16vw, 68px); line-height: 0.9; }
+  .home-name .tagline { font-size: 10px; letter-spacing: 0.16em; }
+  .home-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .home-stats { width: 100%; gap: 12px; flex-wrap: wrap; }
+  .hstat { min-width: calc(50% - 8px); }
+  .hstat-num { font-size: 34px; }
+  .hstat-label { letter-spacing: 0.16em; }
+
+  .section,
+  .section-sm,
+  .section-lg,
+  .career-hero,
+  .records-hero,
+  .gallery-hero,
+  .foundation-hero,
+  .mission-section,
+  .legacy-section,
+  .quote-strip,
+  .closing-section,
+  footer {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .section { padding-top: 72px; padding-bottom: 72px; }
+  .section-sm { padding-top: 56px; padding-bottom: 56px; }
+  .section-lg { padding-top: 84px; padding-bottom: 84px; }
+
+  .section-label,
+  .hstat-label,
+  .cs-label,
+  .cmet-label,
+  .quote-attr,
+  .impact-label,
+  .milestone-year,
+  .stat-box-label,
+  .gallery-tag,
+  .closing-sub {
+    letter-spacing: 0.14em !important;
+  }
+
+  .section-headline,
+  .records-hero h1,
+  .career-hero h1,
+  .gallery-hero h1,
+  .foundation-hero h1 {
+    font-size: clamp(34px, 12vw, 58px);
+    line-height: 0.94;
+  }
+
+  .section-para,
+  .foundation-hero-sub,
+  .timeline-detail,
+  .trait-desc,
+  .style-desc,
+  .elite-record-desc,
+  .initiative-desc,
+  .quote-text {
+    font-size: 15px !important;
+    line-height: 1.55 !important;
+  }
+
+  .trait-grid,
+  .style-grid,
+  .moments-grid,
+  .elite-grid,
+  .awards-grid,
+  .initiatives-grid,
+  .stats-grid,
+  .impact-strip,
+  .quote-strip,
+  .captaincy-split,
+  .career-stats-strip,
+  .chase-stats,
+  .captaincy-metric {
+    grid-template-columns: 1fr !important;
+    display: grid;
+    gap: 10px !important;
+  }
+
+  .tab-buttons {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tab-btn {
+    flex: 0 0 auto;
+    padding: 12px 14px;
+    letter-spacing: 0.12em;
+    font-size: 11px;
+  }
+
+  .timeline-line,
+  .timeline-dot { display: none; }
+
+  .timeline-item {
+    padding: 16px 0;
+    display: block;
+  }
+
+  .timeline-year {
+    position: static;
+    width: auto;
+    text-align: left;
+    margin-bottom: 6px;
+  }
+
+  .timeline-content { padding-left: 0; }
+
+  .milestone-node { width: 140px; padding: 0 10px; }
+  .modal-nav { display: none; }
+  .modal-img-wrap { max-width: 100%; }
+  .modal-close { top: 14px; right: 14px; padding: 8px 12px; font-size: 11px; }
+
+  .gallery-masonry { columns: 1 !important; column-gap: 0; }
+  .gallery-thumb-img { transform: none !important; }
+
+  .foundation-hero-bg {
+    background-size: contain !important;
+    background-position: center top !important;
+    background-repeat: no-repeat !important;
+    background-color: var(--surface) !important;
+  }
+
+  .reveal { opacity: 1; transform: none; transition: none; }
+
+  button, a, .gallery-item, .moment-card, .filter-pill {
+    touch-action: manipulation;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal { opacity: 1 !important; transform: none !important; }
+}
 </style>
 </head>
 <body>
@@ -1918,20 +2108,31 @@ const IMG_HELMET = 'data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1
 const cur = document.getElementById('cursor');
 const curRing = document.getElementById('cursor-ring');
 let curX=0, curY=0, ringX=0, ringY=0;
+const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(hover: none)').matches;
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-document.addEventListener('mousemove', e => {
-  curX = e.clientX; curY = e.clientY;
-  cur.style.left = curX+'px'; cur.style.top = curY+'px';
-});
-(function animRing() {
-  ringX += (curX - ringX) * 0.1;
-  ringY += (curY - ringY) * 0.1;
-  curRing.style.left = ringX+'px'; curRing.style.top = ringY+'px';
-  requestAnimationFrame(animRing);
-})();
+if(isCoarsePointer) {
+  if(cur) cur.style.display = 'none';
+  if(curRing) curRing.style.display = 'none';
+  document.body.style.cursor = 'auto';
+} else {
+  document.addEventListener('mousemove', e => {
+    curX = e.clientX; curY = e.clientY;
+    cur.style.left = curX+'px'; cur.style.top = curY+'px';
+  });
+
+  (function animRing() {
+    ringX += (curX - ringX) * 0.1;
+    ringY += (curY - ringY) * 0.1;
+    curRing.style.left = ringX+'px'; curRing.style.top = ringY+'px';
+    requestAnimationFrame(animRing);
+  })();
+}
 
 // ─── NAVIGATION ───────────────────────────────────
 function showPage(id) {
+  if(id !== 'home') animRunning = false;
+
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-link').forEach(l => {
     l.classList.toggle('active', l.dataset.page === id);
@@ -1957,6 +2158,8 @@ window.addEventListener('scroll', () => {
 // ─── LIQUID MASK (HOME) ───────────────────────────
 const dc = document.getElementById('home-display-canvas');
 const dctx = dc.getContext('2d');
+const off = document.createElement('canvas');
+const octx = off.getContext('2d');
 const faceImg = new Image(); faceImg.src = IMG_FACE;
 const helmImg = new Image(); helmImg.src = IMG_HELMET;
 
@@ -1965,6 +2168,7 @@ let mouse = { x: -999, y: -999 };
 let mainBlob = { x: -999, y: -999 };
 let blobs = [];
 let animRunning = false;
+let homeStaticDrawn = false;
 
 class Blob {
   constructor(x,y) {
@@ -1988,15 +2192,36 @@ function fitDims(iw,ih,cw,ch) {
 function resizeCanvas() {
   W = dc.width = window.innerWidth;
   H = dc.height = window.innerHeight;
+  off.width = W;
+  off.height = H;
 }
 
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-document.addEventListener('mousemove', e => {
-  mouse.x=e.clientX; mouse.y=e.clientY;
-  if(Math.random()>.3) blobs.push(new Blob(e.clientX,e.clientY));
-});
+if(!isCoarsePointer && !prefersReducedMotion) {
+  document.addEventListener('mousemove', e => {
+    mouse.x=e.clientX; mouse.y=e.clientY;
+    if(Math.random()>.3) blobs.push(new Blob(e.clientX,e.clientY));
+  });
+}
+
+function renderHomeStatic() {
+  if(homeStaticDrawn) return;
+  if(!(helmImg.complete && faceImg.complete)) return;
+
+  dctx.clearRect(0,0,W,H);
+
+  const hd=fitDims(helmImg.naturalWidth,helmImg.naturalHeight,W,H);
+  dctx.drawImage(helmImg,hd.x,hd.y,hd.w,hd.h);
+
+  const fd=fitDims(faceImg.naturalWidth,faceImg.naturalHeight,W,H);
+  dctx.globalAlpha = 0.72;
+  dctx.drawImage(faceImg,fd.x,fd.y,fd.w,fd.h);
+  dctx.globalAlpha = 1;
+
+  homeStaticDrawn = true;
+}
 
 function renderHome() {
   if(!animRunning) return;
@@ -2011,9 +2236,7 @@ function renderHome() {
   // Draw face with liquid mask
   if(faceImg.complete && faceImg.naturalWidth) {
     const d=fitDims(faceImg.naturalWidth,faceImg.naturalHeight,W,H);
-    const off=document.createElement('canvas');
     off.width=W; off.height=H;
-    const octx=off.getContext('2d');
     octx.drawImage(faceImg,d.x,d.y,d.w,d.h);
 
     octx.globalCompositeOperation='destination-out';
@@ -2048,6 +2271,17 @@ function renderHome() {
 }
 
 function initLiquidMask() {
+  if(isCoarsePointer || prefersReducedMotion) {
+    const maybeDrawStatic = () => renderHomeStatic();
+    if(faceImg.complete && helmImg.complete) {
+      renderHomeStatic();
+    } else {
+      faceImg.onload = maybeDrawStatic;
+      helmImg.onload = maybeDrawStatic;
+    }
+    return;
+  }
+
   if(!animRunning) {
     animRunning=true;
     let loaded=0;
