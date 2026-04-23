@@ -545,16 +545,47 @@ body:has(a:hover) #cursor, body:has(button:hover) #cursor { width:20px; height:2
   gap: 2px; margin-top: 48px;
 }
 .style-card {
+  position: relative; overflow: hidden;
   background: var(--surface);
   padding: 40px 32px;
   border-left: 2px solid var(--saffron-dim);
   transition: border-color .3s, transform .3s;
 }
-.style-card:hover { border-color: var(--saffron); transform: translateX(4px); }
+.style-card-bg {
+  position: absolute; inset: 0; z-index: 0;
+  transition: transform 0.6s ease;
+}
+.style-card-bg::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(7,7,14,0.95), rgba(7,7,14,0.4));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.style-card:hover .style-card-bg {
+  transform: scale(1.05);
+}
+.style-card:hover .style-card-bg::after {
+  opacity: 1;
+}
+.style-card-content {
+  position: relative; z-index: 2;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+}
+.style-card:hover .style-card-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+.style-card:hover { border-color: var(--saffron); transform: translateX(0); }
 .style-card:nth-child(2) { border-color: var(--green-dim); }
 .style-card:nth-child(2):hover { border-color: var(--green-bright); }
+.style-card:nth-child(3) { border-color: var(--saffron-dim); }
+.style-card:nth-child(3):hover { border-color: var(--saffron); }
+.style-card:nth-child(4) { border-color: var(--green-dim); }
+.style-card:nth-child(4):hover { border-color: var(--green-bright); }
 .style-num { font-family: 'Bebas Neue', sans-serif; font-size: 72px; color: var(--saffron-dim); line-height: 1; }
-.style-card:nth-child(2) .style-num { color: var(--green-dim); }
+.style-card:nth-child(2) .style-num, .style-card:nth-child(4) .style-num { color: var(--green-dim); }
 .style-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: var(--white); letter-spacing: 0.02em; margin-top: -8px; }
 .style-desc { font-size: 13px; color: var(--text-dim); line-height: 1.65; margin-top: 12px; font-weight: 300; }
 
@@ -1340,24 +1371,36 @@ footer {
     <h2 class="section-headline reveal reveal-d1">Playing <span class="headline-green">Style</span></h2>
     <div class="style-grid">
       <div class="style-card reveal reveal-d1">
-        <div class="style-num">01</div>
-        <div class="style-title">Technique</div>
-        <div class="style-desc">Strong bottom-hand control with exceptional cover drive. High elbow, quick feet movement, and minimal backlift allows rapid scoring on all surfaces.</div>
+        <div class="style-card-bg" style="background: url('assets/Career/technique.png') center/cover no-repeat;"></div>
+        <div class="style-card-content">
+          <div class="style-num">01</div>
+          <div class="style-title">Technique</div>
+          <div class="style-desc">Strong bottom-hand control with exceptional cover drive. High elbow, quick feet movement, and minimal backlift allows rapid scoring on all surfaces.</div>
+        </div>
       </div>
       <div class="style-card reveal reveal-d2">
-        <div class="style-num">02</div>
-        <div class="style-title">Mentality</div>
-        <div class="style-desc">Thrives under the highest pressure. His mental resilience and self-belief are benchmark standards — the harder the situation, the better the performance.</div>
+        <div class="style-card-bg" style="background: url('assets/Career/mentality.png') center/cover no-repeat;"></div>
+        <div class="style-card-content">
+          <div class="style-num">02</div>
+          <div class="style-title">Mentality</div>
+          <div class="style-desc">Thrives under the highest pressure. His mental resilience and self-belief are benchmark standards — the harder the situation, the better the performance.</div>
+        </div>
       </div>
       <div class="style-card reveal reveal-d3">
-        <div class="style-num">03</div>
-        <div class="style-title">Fitness</div>
-        <div class="style-desc">Transformed himself from a chubby youngster to the fittest cricketer on earth. His commitment to diet and training redefined what's expected of a top-order batter.</div>
+        <div class="style-card-bg" style="background: url('assets/Career/fitness.png') center/cover no-repeat;"></div>
+        <div class="style-card-content">
+          <div class="style-num">03</div>
+          <div class="style-title">Fitness</div>
+          <div class="style-desc">Transformed himself from a chubby youngster to the fittest cricketer on earth. His commitment to diet and training redefined what's expected of a top-order batter.</div>
+        </div>
       </div>
       <div class="style-card reveal reveal-d4">
-        <div class="style-num">04</div>
-        <div class="style-title">Consistency</div>
-        <div class="style-desc">Extraordinarily low failure variance across formats and conditions. Capable of posting big hundreds on any pitch, in any country, against any attack.</div>
+        <div class="style-card-bg" style="background: url('assets/Career/consistency.png') center/cover no-repeat;"></div>
+        <div class="style-card-content">
+          <div class="style-num">04</div>
+          <div class="style-title">Consistency</div>
+          <div class="style-desc">Extraordinarily low failure variance across formats and conditions. Capable of posting big hundreds on any pitch, in any country, against any attack.</div>
+        </div>
       </div>
     </div>
   </section>
