@@ -147,6 +147,7 @@ body:has(a:hover) #cursor, body:has(button:hover) #cursor { width:20px; height:2
 .home-canvas {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
+  touch-action: manipulation;
 }
 .home-overlay {
   position: absolute; inset: 0;
@@ -252,6 +253,9 @@ body:has(a:hover) #cursor, body:has(button:hover) #cursor { width:20px; height:2
   letter-spacing: 0.02em;
   color: var(--white);
   margin-bottom: 32px;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: manual;
 }
 .headline-saffron { color: var(--saffron); }
 .headline-green { color: var(--green-bright); }
@@ -392,6 +396,13 @@ body:has(a:hover) #cursor, body:has(button:hover) #cursor { width:20px; height:2
   letter-spacing: 0.02em; margin-bottom: 10px;
 }
 .trait-desc { font-size: 13px; color: var(--text-dim); line-height: 1.6; font-weight: 300; }
+
+.career-overview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
 
 /* Timeline */
 .timeline-wrap { position: relative; margin-top: 80px; }
@@ -1218,19 +1229,43 @@ footer {
     font-size: 11px;
   }
 
-  .timeline-line,
-  .timeline-dot { display: none; }
+  .career-overview-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  .timeline-wrap {
+    margin-top: 36px;
+    padding-left: 52px;
+  }
+
+  .timeline-line {
+    display: block;
+    left: 20px;
+    opacity: 0.45;
+  }
 
   .timeline-item {
-    padding: 16px 0;
+    padding: 16px 0 20px 0;
     display: block;
+    border-bottom: 1px solid var(--white-faint);
   }
 
   .timeline-year {
     position: static;
     width: auto;
     text-align: left;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+  }
+
+  .timeline-dot {
+    display: block;
+    left: 15px;
+    top: 20px;
+    width: 10px;
+    height: 10px;
   }
 
   .timeline-content { padding-left: 0; }
@@ -1321,7 +1356,7 @@ footer {
         <div class="hstat"><span class="hstat-num">550+</span><span class="hstat-label">Matches</span></div>
         <div class="hstat"><span class="hstat-num">58.69</span><span class="hstat-label">ODI Average</span></div>
       </div>
-      <span class="home-hint reveal reveal-d3">Move cursor to reveal</span>
+      <span class="home-hint reveal reveal-d3">Move cursor / tap to reveal</span>
     </div>
   </div>
 </div>
@@ -1349,7 +1384,7 @@ footer {
   <!-- 2. Overview -->
   <section class="section section-dark">
     <p class="section-label reveal">Overview</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;">
+    <div class="career-overview-grid">
       <div>
         <h2 class="section-headline reveal reveal-d1">The<br>Complete<br><span class="headline-saffron">Batter</span></h2>
       </div>
@@ -2182,6 +2217,14 @@ let mainBlob = { x: -999, y: -999 };
 let blobs = [];
 let animRunning = false;
 let homeStaticDrawn = false;
+let mobileMaskBound = false;
+let mobileMaskAnimating = false;
+let mobileMaskProgress = 1;
+let mobileMaskFromHelmet = false;
+let mobileMaskToHelmet = false;
+let mobileMaskShowHelmet = false;
+let mobileMaskOrigin = { x: 0, y: 0 };
+let pendingMobileTap = null;
 
 class Blob {
   constructor(x,y) {
@@ -2207,6 +2250,11 @@ function resizeCanvas() {
   H = dc.height = window.innerHeight;
   off.width = W;
   off.height = H;
+  homeStaticDrawn = false;
+
+  if(isCoarsePointer && !mobileMaskAnimating) {
+    renderHomeStatic();
+  }
 }
 
 window.addEventListener('resize', resizeCanvas);
@@ -2222,18 +2270,110 @@ if(!isCoarsePointer && !prefersReducedMotion) {
 function renderHomeStatic() {
   if(homeStaticDrawn) return;
   if(!(helmImg.complete && faceImg.complete)) return;
+  drawHomeImage(mobileMaskShowHelmet ? helmImg : faceImg);
+  homeStaticDrawn = true;
+}
+
+function drawHomeImage(img) {
+  if(!(img && img.complete && img.naturalWidth)) return;
+  dctx.clearRect(0,0,W,H);
+  const d = fitDims(img.naturalWidth,img.naturalHeight,W,H);
+  dctx.drawImage(img,d.x,d.y,d.w,d.h);
+}
+
+function homeImagesReady() {
+  return (
+    helmImg.complete && faceImg.complete &&
+    helmImg.naturalWidth > 0 && faceImg.naturalWidth > 0
+  );
+}
+
+function flushPendingMobileTap() {
+  if(!pendingMobileTap || !homeImagesReady()) return;
+  const { x, y } = pendingMobileTap;
+  pendingMobileTap = null;
+  triggerMobileMask(x, y);
+}
+
+function drawMobileMaskFrame(fromHelmet, toHelmet, progress) {
+  if(!(helmImg.complete && faceImg.complete)) return;
+
+  const fromImg = fromHelmet ? helmImg : faceImg;
+  const toImg = toHelmet ? helmImg : faceImg;
+  const maxRadius = Math.hypot(W, H);
+  const radius = Math.max(0, Math.min(1, progress)) * maxRadius;
 
   dctx.clearRect(0,0,W,H);
+  const baseDims = fitDims(fromImg.naturalWidth,fromImg.naturalHeight,W,H);
+  dctx.drawImage(fromImg,baseDims.x,baseDims.y,baseDims.w,baseDims.h);
 
-  const hd=fitDims(helmImg.naturalWidth,helmImg.naturalHeight,W,H);
-  dctx.drawImage(helmImg,hd.x,hd.y,hd.w,hd.h);
+  const fade = Math.max(18, Math.min(40, radius * 0.08));
+  const g = octx.createRadialGradient(
+    mobileMaskOrigin.x,
+    mobileMaskOrigin.y,
+    Math.max(0, radius - fade),
+    mobileMaskOrigin.x,
+    mobileMaskOrigin.y,
+    radius
+  );
+  g.addColorStop(0, 'rgba(0,0,0,1)');
+  g.addColorStop(1, 'rgba(0,0,0,0)');
 
-  const fd=fitDims(faceImg.naturalWidth,faceImg.naturalHeight,W,H);
-  dctx.globalAlpha = 0.72;
-  dctx.drawImage(faceImg,fd.x,fd.y,fd.w,fd.h);
-  dctx.globalAlpha = 1;
+  off.width = W;
+  off.height = H;
+  octx.clearRect(0, 0, W, H);
+  const toDims = fitDims(toImg.naturalWidth,toImg.naturalHeight,W,H);
+  octx.drawImage(toImg,toDims.x,toDims.y,toDims.w,toDims.h);
+  octx.globalCompositeOperation = 'destination-in';
+  octx.fillStyle = g;
+  octx.fillRect(0, 0, W, H);
+  octx.globalCompositeOperation = 'source-over';
 
-  homeStaticDrawn = true;
+  dctx.drawImage(off, 0, 0);
+}
+
+function animateMobileMask() {
+  if(!mobileMaskAnimating) return;
+
+  const speed = prefersReducedMotion ? 1 : 0.12;
+  mobileMaskProgress = lerp(mobileMaskProgress, 1, speed);
+  drawMobileMaskFrame(mobileMaskFromHelmet, mobileMaskToHelmet, mobileMaskProgress);
+
+  if(1 - mobileMaskProgress < 0.01 || prefersReducedMotion) {
+    mobileMaskAnimating = false;
+    mobileMaskShowHelmet = mobileMaskToHelmet;
+    homeStaticDrawn = false;
+    renderHomeStatic();
+    return;
+  }
+
+  requestAnimationFrame(animateMobileMask);
+}
+
+function triggerMobileMask(clientX, clientY) {
+  if(!homeImagesReady()) {
+    pendingMobileTap = { x: clientX, y: clientY };
+    return;
+  }
+
+  mobileMaskOrigin.x = clientX;
+  mobileMaskOrigin.y = clientY;
+  mobileMaskFromHelmet = mobileMaskShowHelmet;
+  mobileMaskToHelmet = !mobileMaskShowHelmet;
+  mobileMaskProgress = 0;
+  mobileMaskAnimating = true;
+  homeStaticDrawn = false;
+  requestAnimationFrame(animateMobileMask);
+}
+
+function bindMobileMaskEvents() {
+  if(mobileMaskBound) return;
+  mobileMaskBound = true;
+
+  dc.addEventListener('pointerdown', (e) => {
+    if(!isCoarsePointer) return;
+    triggerMobileMask(e.clientX, e.clientY);
+  }, { passive: true });
 }
 
 function renderHome() {
@@ -2285,12 +2425,17 @@ function renderHome() {
 
 function initLiquidMask() {
   if(isCoarsePointer || prefersReducedMotion) {
-    const maybeDrawStatic = () => renderHomeStatic();
-    if(faceImg.complete && helmImg.complete) {
+    bindMobileMaskEvents();
+    const maybeDrawStatic = () => {
       renderHomeStatic();
+      flushPendingMobileTap();
+    };
+    if(homeImagesReady()) {
+      renderHomeStatic();
+      flushPendingMobileTap();
     } else {
-      faceImg.onload = maybeDrawStatic;
-      helmImg.onload = maybeDrawStatic;
+      faceImg.addEventListener('load', maybeDrawStatic, { once: true });
+      helmImg.addEventListener('load', maybeDrawStatic, { once: true });
     }
     return;
   }
