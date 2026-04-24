@@ -195,6 +195,49 @@ body:has(a:hover) #cursor, body:has(button:hover) #cursor { width:20px; height:2
   color: var(--white-dim);
   margin-top: 4px;
 }
+.home-audio-control {
+  position: absolute;
+  right: 24px;
+  bottom: 50px;
+  pointer-events: auto;
+  border: none;
+  background: transparent;
+  color: var(--white);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: transform .2s ease, opacity .2s ease;
+}
+.home-audio-control:hover {
+  transform: translateY(-2px);
+}
+.vinyl-disc-wrap {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.vinyl-disc {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.vinyl-label {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.14em;
+  font-size: 26px;
+  color: var(--saffron);
+  font-weight: 400;
+  line-height: 1;
+}
+.home-audio-control.playing .vinyl-label {
+  color: var(--green-bright);
+}
 .home-hint {
   font-size: 10px; letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -1144,6 +1187,21 @@ footer {
   .hstat { min-width: calc(50% - 8px); }
   .hstat-num { font-size: 34px; }
   .hstat-label { letter-spacing: 0.16em; }
+  .home-audio-control {
+    position: absolute;
+    right: 14px;
+    bottom: 126px;
+    align-self: auto;
+    margin-top: 0;
+    z-index: 26;
+  }
+  .vinyl-disc-wrap {
+    width: 92px;
+    height: 92px;
+  }
+  .vinyl-label {
+    font-size: 20px;
+  }
 
   .section,
   .section-sm,
@@ -1356,6 +1414,12 @@ footer {
         <div class="hstat"><span class="hstat-num">550+</span><span class="hstat-label">Matches</span></div>
         <div class="hstat"><span class="hstat-num">58.69</span><span class="hstat-label">ODI Average</span></div>
       </div>
+      <button id="vinyl-toggle" class="home-audio-control reveal reveal-d3" type="button" aria-label="Toggle GOAT anthem" aria-pressed="false">
+        <span class="vinyl-disc-wrap">
+          <img class="vinyl-disc" src="assets/vinyl.png" alt="Vinyl Disc">
+        </span>
+        <span class="vinyl-label">GOAT TALK</span>
+      </button>
       <span class="home-hint reveal reveal-d3">Move cursor / tap to reveal</span>
     </div>
   </div>
@@ -2450,6 +2514,42 @@ function initLiquidMask() {
   }
 }
 initLiquidMask();
+
+// ─── VINYL AUDIO CONTROL ─────────────────────────
+const goatAudio = new Audio('assets/Goat.mp3');
+goatAudio.loop = true;
+goatAudio.preload = 'auto';
+
+const vinylToggle = document.getElementById('vinyl-toggle');
+
+function syncVinylUi() {
+  if(!vinylToggle) return;
+  const playing = !goatAudio.paused;
+  vinylToggle.classList.toggle('playing', playing);
+  vinylToggle.setAttribute('aria-pressed', playing ? 'true' : 'false');
+}
+
+async function toggleGoatAudio() {
+  if(goatAudio.paused) {
+    try {
+      await goatAudio.play();
+    } catch (_) {
+      // Ignore blocked-playback errors; user can tap again.
+    }
+  } else {
+    goatAudio.pause();
+  }
+  syncVinylUi();
+}
+
+if(vinylToggle) {
+  vinylToggle.addEventListener('click', toggleGoatAudio);
+}
+
+goatAudio.addEventListener('play', syncVinylUi);
+goatAudio.addEventListener('pause', syncVinylUi);
+goatAudio.addEventListener('ended', syncVinylUi);
+syncVinylUi();
 
 // ─── SCROLL REVEAL ────────────────────────────────
 function initReveal() {
