@@ -1182,15 +1182,26 @@ footer {
   .home-ui { padding: 92px 16px 20px; }
   .home-name h1 { font-size: clamp(44px, 16vw, 68px); line-height: 0.9; }
   .home-name .tagline { font-size: 10px; letter-spacing: 0.16em; }
-  .home-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
-  .home-stats { width: 100%; gap: 12px; flex-wrap: wrap; }
+  .home-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    position: relative;
+    min-height: 138px;
+  }
+  .home-stats {
+    width: calc(100% - 122px);
+    gap: 12px;
+    flex-wrap: wrap;
+  }
   .hstat { min-width: calc(50% - 8px); }
   .hstat-num { font-size: 34px; }
   .hstat-label { letter-spacing: 0.16em; }
   .home-audio-control {
     position: absolute;
-    right: 14px;
-    bottom: 126px;
+    right: 0;
+    top: 0;
     align-self: auto;
     margin-top: 0;
     z-index: 26;
